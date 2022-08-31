@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const verifyToken = require("./verifyToken");
+const {verifyToken,verifyTokenAndAuthorization,verifyTokenAndAdmin} = require("./verifyToken");
 const Cart = require("../models/Cart")
 
 
@@ -45,11 +45,11 @@ router.delete("/:id", verifyTokenAndAuthorization, async (req, res) => {
 })
 
 // GET USER CART
-router.get("/find/:userId",verifyToken.verifyTokenAndAuthorization, async (req, res) => {
+router.get("/find/:userId",verifyTokenAndAuthorization, async (req, res) => {
     try {
-        const Cart = await Cart.findOne({userId : req.params.userId});
+        const cart = await Cart.findOne({userId : req.params.userId});
 
-        res.status(200).json(Cart)
+        res.status(200).json(cart)
 
     } catch (error) {
         res.status(500).json(error)
@@ -60,8 +60,8 @@ router.get("/find/:userId",verifyToken.verifyTokenAndAuthorization, async (req, 
 
   router.get("/",verifyTokenAndAdmin,async(req,res)=>{
     try {
-        const Carts = await Cart.find()
-        res.status(200).json(Carts)
+        const carts = await Cart.find()
+        res.status(200).json(carts)
     } catch (error) {
         res.status(500).json(error)
     }
